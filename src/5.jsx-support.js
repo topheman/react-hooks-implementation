@@ -13,12 +13,6 @@ const React = (function() {
     idx++;
     return [state, setState];
   }
-  function workLoop() {
-    idx = 0; // must reset idx before render
-    setTimeout(workLoop, 300); // React uses requestIdleCallback
-    render(hooks)();
-  }
-  setTimeout(workLoop, 300);
   function useEffect(cb, depArray) {
     let hasChanged = true;
     let prevDeps = hooks[idx];
@@ -36,29 +30,11 @@ const React = (function() {
 
 function Component() {
   const [count, setCount] = React.useState(1);
-  const list = useDogs(count);
+  const [text, setText] = React.useState("foo");
   React.useEffect(() => {
     console.log("Boom!");
   }, []);
-  return (
-    <main>
-      <h1>Hello World!</h1>
-      <button onClick={() => setCount(count + 1)}>Click me {count}</button>
-      {list.map(dog => (
-        <img src={dog} />
-      ))}
-    </main>
-  );
-}
-
-function useDogs(count) {
-  const [list, setList] = React.useState([]);
-  React.useEffect(() => {
-    fetch("https://dogceo.netlify.com/.netlify/functions/pics?count=" + count)
-      .then(x => x.json())
-      .then(x => setList(x));
-  }, [count]);
-  return list;
+  return <h1>Hello World!</h1>;
 }
 
 var App;
